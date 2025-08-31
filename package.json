@@ -1,0 +1,35 @@
+{
+  "name": "supergulp",
+  "version": "1.0.0",
+  "description": "Learn Gulp by building development enviornment",
+  "main": "index.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HanDongWook/supergulp.git"
+  },
+  "author": "Han Dong Wook",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HanDongWook/supergulp/issues"
+  },
+  "homepage": "https://github.com/HanDongWook/supergulp#readme",
+  "scripts": {
+    "dev": "gulp dev",
+    "build": "gulp build"
+  },
+  "devDependencies": {
+    "gulp": "^5.0.1",
+    "gulp-pug": "^5.0.0",
+    "sass": "^1.91.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
+    "@babel/register": "^7.28.3",
+    "del": "^8.0.0",
+    "gulp-image": "^6.3.1",
+    "gulp-sass": "^6.0.1",
+    "gulp-webserver": "^0.9.1"
+  }
+}
