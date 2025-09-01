@@ -5,8 +5,9 @@ import ws from "gulp-webserver";
 import image from "gulp-image";
 import gulpSass from "gulp-sass";
 import dartSass from "sass";
-import autoprefixer from "gulp-autoprefixer";
 import miniCSS from "gulp-csso";
+import bro from "gulp-bro";
+import babelify from "babelify";
 
 const sass = gulpSass(dartSass); // <--- 이 부분이 핵심 수정입니다.
 
@@ -24,6 +25,11 @@ const routes = {
         src: "src/scss/style.scss",
         dest: "build/css",
         watch: "src/scss/**/*.scss"
+    },
+    js: {
+        src: "src/js/main.js",
+        dest: "build/js",
+        watch: "src/js/**/*.js"
     }
 };
 
@@ -49,22 +55,33 @@ const img = () =>
 const styles = () => {
     return src(routes.scss.src)
         .pipe(sass().on("error", sass.logError))
-        .pipe(autoprefixer({
-            browsers: ['last 2 versions']
-        }))
         .pipe(miniCSS())
         .pipe(gulp.dest(routes.scss.dest));
+}
+
+const js = () => {
+    return src(routes.js.src)
+        .pipe(
+            bro({
+                debug: true,
+                transform: [
+                    babelify.configure({ presets: ['@babel/preset-env'] }),
+                    ["uglifyify", { global: true }]
+                ]
+            }))
+        .pipe(gulp.dest(routes.js.dest));
 }
 
 const watch = () => {
     gulp.watch(routes.pug.watch, pug);
     gulp.watch(routes.img.src, pug);
     gulp.watch(routes.scss.watch, styles);
+    gulp.watch(routes.js.watch, js);
 }
 
 const prepare = gulp.series([clean, img]);
 
-const assets = gulp.series([pug, styles]);
+const assets = gulp.series([pug, styles, js]);
 
 const postDev = gulp.parallel([webserver, watch]);
 
