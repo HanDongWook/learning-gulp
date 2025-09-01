@@ -5,6 +5,8 @@ import ws from "gulp-webserver";
 import image from "gulp-image";
 import gulpSass from "gulp-sass";
 import dartSass from "sass";
+import autoprefixer from "gulp-autoprefixer";
+import miniCSS from "gulp-csso";
 
 const sass = gulpSass(dartSass); // <--- 이 부분이 핵심 수정입니다.
 
@@ -25,28 +27,32 @@ const routes = {
     }
 };
 
-const pug = () => 
+const pug = () =>
     gulp
-    .src(routes.pug.src)
-    .pipe(gpug())
-    .pipe(gulp.dest(routes.pug.dest));
+        .src(routes.pug.src)
+        .pipe(gpug())
+        .pipe(gulp.dest(routes.pug.dest));
 
-const clean = () => deleteAsync(["build"]); 
+const clean = () => deleteAsync(["build"]);
 
 const webserver = () => gulp.src("build").pipe(ws({
     livereload: true,
     open: true
 }));
 
-const img = () => 
+const img = () =>
     gulp
-    .src(routes.img.src)
-    .pipe(image())
-    .pipe(gulp.dest(routes.img.dest));
+        .src(routes.img.src)
+        .pipe(image())
+        .pipe(gulp.dest(routes.img.dest));
 
 const styles = () => {
     return src(routes.scss.src)
         .pipe(sass().on("error", sass.logError))
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions']
+        }))
+        .pipe(miniCSS())
         .pipe(gulp.dest(routes.scss.dest));
 }
 
